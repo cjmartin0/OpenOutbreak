@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<!--
+		File: Call_SIR_hrml
+			A test file to drive the basic SIR API.
+			
+		OpenOutbreak project 2013
+		An opensource, networked, graphical model of the spread of an infectious disease across a set of geographical areas.
+		
+		Base SIR model - using proportions rather than cases.
+		
+		Inputs: 
+		
+			theR0 = Basic reproduction number (R0)
+			theR0 = Duration of the infective period in days.
+			theTurnover = The turnover of the population.
+			
+			theInfected  = the intial fraction of the population that is infected.
+			theSusceptible  = th eproportion of the population that is uninfected and not immune.
+			theRecovered  = the proportion of the population that is immune post infection.
+			
+			theDays  = the number of projected days to simulate.
+			doPerturb  = a flag to indicate whether an element of random perturbation is desired in the simulation. (boolean)
+			
+		Outputs:
+			Displays the retunred json object with the foraward projections of infected fraction, susceptible fraction and recovered fraction.
+			{
+				Infected: array(days),
+				Recovered: array(days),
+				Susceptible: array(days)
+			}
+			
+		Contributors:
+			Dr Chris Martin - initial file.
+	-->
+<head>
+<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>SIR</title>
+
+<script>
+function getResult()
+{
+	var str;
+	var theR0 = document.getElementById("R0");
+	var theDuration  = document.getElementById("Duration");
+	var theInfected  = document.getElementById("Infected");
+	var theSusceptible  = document.getElementById("Susceptible");
+	var theRecovered  = document.getElementById("Recovered");
+	var theDays  = document.getElementById("Days");
+	var theTurnover = document.getElementById("Turnover");
+	var doPerturb  = document.getElementById("Perturb");
+	
+	str = '{'+'"R0":'+theR0.value+', "Duration":'+theDuration.value+', "Infected":'+theInfected.value+', "Susceptible":'+theSusceptible.value+', "Recovered":'+theRecovered.value+', "Days":'+theDays.value+', "Turnover":'+theTurnover.value+', "Perturb":'+doPerturb.checked+'}';
+	
+	$.ajax({
+    	url:"http://localhost/Epidemic/SIR.php?q="+str,
+    	type:'GET',
+    	dataType:"jsonp",
+    	jsonp:"callback",
+    	data:str,
+    	success:function(theResult){
+    		document.getElementById("theResult").innerHTML=theResult;
+   		}
+	});
+
+}
+</script>
+
+</head>
+<body>
+
+	R0<input type="text" size="4" id="R0" value="2.1" /> <br>
+	Duration<input type="text" size="4" id="Duration" value="5" /><br>
+	Infected<input type="text" size="4" id="Infected" value="0.001" /><br>
+	Susceptible<input type="text" size="4" id="Susceptible" value="0.998" /><br>
+	Recovered<input type="text" size="4" id="Recovered" value="0.001" /><br>
+	Days to simulate<input type="text" size="4" id="Days" value="5" /><br>
+	Turnover<input type="text" size="4" id="Turnover" value="0.01" /><br>
+	Perturb it?<input type="checkbox" size="4" id="Perturb" /><br>
+	<button onclick="getResult()">Go</button>
+	Result:<div id="theResult"></div>
+
+</body>
+</html>
