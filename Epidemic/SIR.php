@@ -1,7 +1,41 @@
 <?php
-// Opensource model for the openOutpbreak project
-// Chris Martin
-// A basic SIR model to calulate the next day's infected, susceptible, recovered compartments in a population.
+
+/*		File: SIR_hrml
+			A basic SIR (suceptible, infected, recovered) API.
+			
+		Part of:
+			OpenOutbreak project 2013
+			An opensource, networked, graphical model of the spread of an infectious disease across a set of geographical areas.
+		
+		Base SIR model - using proportions rather than cases.
+		
+		Inputs: 
+			json object put into '$theData'
+			
+			{
+				R0 = Basic reproduction number (R0)
+				Duratiion = Duration of the infective period in days.
+				Turnover = The turnover of the population.
+			
+				Infected  = the intial fraction of the population that is infected.
+				Susceptible  = th eproportion of the population that is uninfected and not immune.
+				Recovered  = the proportion of the population that is immune post infection.
+			
+				Days  = the number of projected days to simulate.
+				Perturb  = a flag to indicate whether an element of random perturbation is desired in the simulation. (boolean)
+			}
+			
+		Outputs:
+			a json object with the foraward projections of infected fraction, susceptible fraction and recovered fraction.
+			{
+				Infected: array(days),
+				Recovered: array(days),
+				Susceptible: array(days)
+			}
+			
+		Contributors:
+			Dr Chris Martin - initial file.
+*/
 
 //get the q parameter from URL
 $q=$_GET["q"];   // R0  Duration  Infected  Susceptible  Recovered doPerturb
